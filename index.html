@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AARABOT</title>
+<style>
+  body {
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    background: #f7f7f8;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  .chat-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+  }
+
+  .message {
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+
+  .message strong {
+    color: #131414;
+  }
+
+  .message replytext {
+    color: #f645ca;
+  }
+
+  .input-area {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    border-top: 1px solid #ddd;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .input-box {
+    width: 100%;
+    max-width: 700px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f0f0f0;
+    border-radius: 25px;
+    padding: 8px 16px;
+  }
+
+  .input-box input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    outline: none;
+  }
+
+  .input-box button {
+    background: #080808;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  .input-box button:hover {
+    background: #ef8fda;
+  }
+  h1 {
+  text-align: center;
+  margin: 20px 0;
+  color: #080808;
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+</style>
+</head>
+<body>
+  <h1>AARABOT🌸 </h1>
+  <div class="chat-container" id="chat">
+    <!-- Chat messages will appear here -->
+  </div>
+
+  <div class="input-area">
+    <div class="input-box">
+      <input type="text" id="prompt" placeholder="Type your message..." />
+      <button onclick="sendMessage()">Send</button>
+    
+</div>
+
+    </div>
+  </div>
+
+  <!-- ✅ move script here (after all HTML) -->
+  <script>
+      async function sendMessage() {
+        alert("button clicked");
+      const promptInput = document.getElementById('prompt');
+      const prompt = promptInput.value.trim();
+      if (!prompt) return;
+
+      const chatDiv = document.getElementById('chat');
+      chatDiv.innerHTML += `<div class="message"><strong>You:</strong> ${prompt}</div>`;
+      promptInput.value = '';
+
+      try {
+        const response = await fetch('/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt })
+        });
+
+        const data = await response.json();
+        chatDiv.innerHTML += `<div class="message"><replytext>AARABOT:</replytext> ${data.reply}</div>`;
+      } catch (err) {
+        chatDiv.innerHTML += `<div class="message" style="color:red;"><strong>Error:</strong> Could not reach server.</div>`;
+      }
+
+      chatDiv.scrollTop = chatDiv.scrollHeight;
+    }
+  </script>
+</body>
+</html>
